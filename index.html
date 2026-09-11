@@ -48,15 +48,37 @@
             border-radius: 30px;
             margin-bottom: 15px;
         }
+        .search-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 600px;
+            margin: 10px auto 0 auto;
+            background: #f9fbfb;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0eae8;
+        }
+        .search-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .search-block span {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #34495e;
+        }
         .converter-box {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 6px;
+            flex-wrap: wrap;
         }
         .converter-box select {
-            font-size: 1rem;
-            padding: 8px;
+            font-size: 0.95rem;
+            padding: 6px 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
             outline: none;
@@ -155,26 +177,53 @@
             <span id="live-clock">00:00:00 م</span>
         </div>
 
-        <div style="font-weight: bold; margin-bottom: 5px; font-size: 0.95rem;">🔍 اختر تاريخاً مخصصاً لتحويله فوراً:</div>
-        <div class="converter-box">
-            <select id="select-day"></select>
-            <select id="select-month">
-                <option value="0">يناير (1)</option>
-                <option value="1">فبراير (2)</option>
-                <option value="2">مارس (3)</option>
-                <option value="3">أبريل (4)</option>
-                <option value="4">مايو (5)</option>
-                <option value="5">يونيو (6)</option>
-                <option value="6">يوليو (7)</option>
-                <option value="7">أغسطس (8)</option>
-                <option value="8">سبتمبر (9)</option>
-                <option value="9">أكتوبر (10)</option>
-                <option value="10">نوفمبر (11)</option>
-                <option value="11">ديسمبر (12)</option>
-            </select>
-            <select id="select-year"></select>
+        <!-- الصندوق المطور الذي يحتوي على خانتين منفصلتين للميلادي والهجري -->
+        <div class="search-wrapper">
+            <div class="search-block">
+                <span>🔍 البحث والتحويل بالتقويم الميلادي (العالمي):</span>
+                <div class="converter-box">
+                    <select id="select-day"></select>
+                    <select id="select-month">
+                        <option value="0">يناير (1)</option>
+                        <option value="1">فبراير (2)</option>
+                        <option value="2">مارس (3)</option>
+                        <option value="3">أبريل (4)</option>
+                        <option value="4">مايو (5)</option>
+                        <option value="5">يونيو (6)</option>
+                        <option value="6">يوليو (7)</option>
+                        <option value="7">أغسطس (8)</option>
+                        <option value="8">سبتمبر (9)</option>
+                        <option value="9">أكتوبر (10)</option>
+                        <option value="10">نوفمبر (11)</option>
+                        <option value="11">ديسمبر (12)</option>
+                    </select>
+                    <select id="select-year"></select>
+                </div>
+            </div>
+
+            <div class="search-block" style="border-top: 1px dashed #ccc; padding-top: 10px;">
+                <span>🌙 البحث والتحويل بالتقويم الهجري الإسلامي:</span>
+                <div class="converter-box">
+                    <select id="hijri-day"></select>
+                    <select id="hijri-month">
+                        <option value="1">محرّم (1)</option>
+                        <option value="2">صَفَر (2)</option>
+                        <option value="3">ربيع الأول (3)</option>
+                        <option value="4">ربيع الآخر (4)</option>
+                        <option value="5">جمادى الأولى (5)</option>
+                        <option value="6">جمادى الآخرة (6)</option>
+                        <option value="7">رجب (7)</option>
+                        <option value="8">شعبان (8)</option>
+                        <option value="9">رمضان (9)</option>
+                        <option value="10">شوال (10)</option>
+                        <option value="11">ذو القعدة (11)</option>
+                        <option value="12">ذو الحجة (12)</option>
+                    </select>
+                    <select id="hijri-year"></select>
+                </div>
+            </div>
+            <button class="reset-btn" id="reset-button" onclick="resetToToday()">العودة للوقت الحالي الحي 🔄</button>
         </div>
-        <button class="reset-btn" id="reset-button" onclick="resetToToday()">العودة للوقت الحالي الحي 🔄</button>
     </header>
 
     <div class="grid-container" id="calendars-grid"></div>
@@ -190,12 +239,21 @@
         const daySelect = document.getElementById('select-day');
         const monthSelect = document.getElementById('select-month');
         const yearSelect = document.getElementById('select-year');
+        
+        const hijriDaySelect = document.getElementById('hijri-day');
+        const hijriMonthSelect = document.getElementById('hijri-month');
+        const hijriYearSelect = document.getElementById('hijri-year');
 
         for (let d = 1; d <= 31; d++) {
             daySelect.options[daySelect.options.length] = new Option(d, d);
+            if (d <= 30) hijriDaySelect.options[hijriDaySelect.options.length] = new Option(d, d);
         }
         for (let y = 1; y <= 2100; y++) {
             yearSelect.options[yearSelect.options.length] = new Option(y, y);
+        }
+        // هنا تم تعديل نطاق السنوات الهجرية لتبدأ من 1 إلى 1600
+        for (let hy = 1; hy <= 1600; hy++) {
+            hijriYearSelect.options[hijriYearSelect.options.length] = new Option(hy, hy);
         }
 
         function updateClock() {
@@ -208,28 +266,67 @@
                 monthSelect.value = now.getMonth();
                 yearSelect.value = now.getFullYear();
                 
+                syncToHijriInputs(now);
                 renderCalendars(now);
             }
         }
         setInterval(updateClock, 1000);
 
-        function handleSelectChange() {
+        function syncToHijriInputs(gDate) {
+            try {
+                const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {day:'numeric', month:'numeric', year:'numeric'});
+                const parts = formatter.formatToParts(gDate);
+                hijriDaySelect.value = parseInt(parts.find(p => p.type === 'day').value);
+                hijriMonthSelect.value = parseInt(parts.find(p => p.type === 'month').value);
+                hijriYearSelect.value = parseInt(parts.find(p => p.type === 'year').value);
+            } catch(e){}
+        }
+
+        function handleGregorianChange() {
             isLiveMode = false;
-            document.getElementById('live-indicator').style.display = 'none';
-            document.getElementById('live-clock').innerText = "تاريخ مخصص";
-            document.getElementById('reset-button').style.display = 'inline-block';
-            
+            stopLiveUI();
             const d = parseInt(daySelect.value);
             const m = parseInt(monthSelect.value);
             const y = parseInt(yearSelect.value);
-            
             selectedDate = new Date(y, m, d);
+            syncToHijriInputs(selectedDate);
+            renderCalendars(selectedDate);
+        }
+        function handleHijriChange() {
+            isLiveMode = false;
+            stopLiveUI();
+            const hd = parseInt(hijriDaySelect.value);
+            const hm = parseInt(hijriMonthSelect.value);
+            const hy = parseInt(hijriYearSelect.value);
+
+            const gEstimate = new Date((hy + 430) * 0.970224 + 621.564);
+            let foundDate = gEstimate;
+            
+            for (let i = -5; i <= 5; i++) {
+                let testDate = new Date(gEstimate.getTime() + i * 24 * 60 * 60 * 1000);
+                try {
+                    const parts = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(testDate);
+                    if (parseInt(parts.find(p => p.type === 'day').value) === hd &&
+                        parseInt(parts.find(p => p.type === 'month').value) === hm &&
+                        parseInt(parts.find(p => p.type === 'year').value) === hy) {
+                        foundDate = testDate;
+                        break;
+                    }
+                } catch(e){}
+            }
+
+            selectedDate = foundDate;
+            daySelect.value = selectedDate.getDate();
+            monthSelect.value = selectedDate.getMonth();
+            yearSelect.value = selectedDate.getFullYear();
             renderCalendars(selectedDate);
         }
 
-        daySelect.addEventListener('change', handleSelectChange);
-        monthSelect.addEventListener('change', handleSelectChange);
-        yearSelect.addEventListener('change', handleSelectChange);
+        function stopLiveUI() {
+            document.getElementById('live-indicator').style.display = 'none';
+            document.getElementById('live-clock').innerText = "تاريخ مخصص";
+            document.getElementById('reset-button').style.display = 'inline-block';
+        }
 
         function resetToToday() {
             isLiveMode = true;
@@ -242,16 +339,13 @@
             const baseDate = new Date(1900, 0, 31); 
             const diffTime = date - baseDate;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
             let cYear = 4637 + Math.floor(diffDays / 365.2425);
             let remainingDays = diffDays % 365;
             let cMonth = Math.floor(remainingDays / 29.53) + 1;
             let cDay = Math.floor(remainingDays % 29.53) + 1;
-            
             if(cMonth > 12) cMonth = 12;
             if(cDay > 30) cDay = 30;
             if(cDay <= 0) cDay = 1;
-            
             return `الشهر ${cMonth}، اليوم ${cDay}، سنة ${cYear} من بدء حكم الإمبراطور الأصفر`;
         }
 
@@ -343,7 +437,15 @@
             });
         }
 
-        resetToToday();
+        daySelect.addEventListener('change', handleGregorianChange);
+        monthSelect.addEventListener('change', handleGregorianChange);
+        yearSelect.addEventListener('change', handleGregorianChange);
+
+        hijriDaySelect.addEventListener('change', handleHijriChange);
+        hijriMonthSelect.addEventListener('change', handleHijriChange);
+        hijriYearSelect.addEventListener('change', handleHijriChange);
+
+        updateClock();
     </script>
 </body>
 </html>
