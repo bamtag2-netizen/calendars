@@ -3,401 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان البحور - المنصة الشاملة للبحور الـ 16</title>
+    <title>المرصد العالمي للتقاويم ومحول التواريخ الذكي</title>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #151f32;
-            --primary: #38bdf8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --text: #f8fafc;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --primary-color: #16a085;
+            --accent-color: #e67e22;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text);
+            color: var(--text-color);
             margin: 0;
             padding: 15px;
         }
-        .container { max-width: 600px; margin: 0 auto; overflow-x: hidden; }
-        header { text-align: center; margin-bottom: 25px; }
-        h1 { color: var(--primary); font-size: 24px; margin-bottom: 5px; }
-        .input-section {
-            background: var(--card-bg);
+        header {
+            text-align: center;
+            background: #ffffff;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 20px;
+            border-bottom: 4px solid var(--primary-color);
         }
-        textarea {
-            width: 100%;
-            height: 150px;
-            background: #0b0f19;
-            border: 1px solid #334155;
-            border-radius: 8px;
+        header h1 {
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+            font-size: 1.6rem;
+        }
+        header p {
+            margin: 0 0 15px 0;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        .clock-container {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: var(--primary-color);
             color: white;
-            padding: 12px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            background: var(--primary);
-            color: #0b0f19;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 12px;
-        }
-        .part-result {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-        .part-title {
-            overflow-wrap: anywhere;
-            font-weight: bold;
-            color: var(--primary);
-            border-bottom: 1px solid #334155;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-        }
-        .badge {
             display: inline-block;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 6px 18px;
+            border-radius: 30px;
             margin-bottom: 15px;
         }
-        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        
-        .tafila-blocks {
+        .search-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin: 12px 0;
+            gap: 15px;
+            max-width: 600px;
+            margin: 10px auto 0 auto;
+            background: #f9fbfb;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0eae8;
         }
-        .tafila-box {
-            background: #0b0f19;
-            padding: 12px 18px;
-            border-radius: 8px;
-            border: 1px solid #1e293b;
-        }
-        .row-item {
+        .search-block {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .search-block span {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #34495e;
+        }
+        .converter-box {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
             flex-wrap: wrap;
+        }
+        .converter-box select {
+            font-size: 0.95rem;
+            padding: 6px 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+            color: var(--text-color);
+            font-family: inherit;
+        }
+        .converter-box select:focus {
+            border-color: var(--primary-color);
+        }
+        .reset-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            display: none;
+            font-weight: bold;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .calendar-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary-color);
+        }
+        .calendar-card h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #34495e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 4px 12px;
-            margin: 4px 0;
         }
-        .label-text { font-size: 16px; color: #94a3b8; font-weight: bold; }
-        .symbols { 
-            letter-spacing: 2px; 
-            font-size: 20px; 
-            max-width: 100%;
-            min-width: 0;
-            word-break: break-all;
-            text-align: left;
-            font-family: monospace; 
+        .calendar-card .date-display {
+            font-size: 1.2rem;
             font-weight: bold;
-            color: var(--success);
-            direction: ltr; 
+            color: #2c3e50;
+            margin: 12px 0 5px 0;
+            line-height: 1.4;
         }
-        .tafila-name { font-size: 15px; color: var(--primary); font-weight: bold; }
-        .site-footer { text-align: center; color: #64748b; font-size: 13px; margin: 30px 0 10px; padding-top: 15px; border-top: 1px solid #1e293b; }
+        .calendar-card .type-badge {
+            font-size: 0.75rem;
+            background: #e8f8f5;
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+        .months-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            font-family: inherit;
+            color: var(--primary-color);
+            background: #ffffff;
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .months-btn:hover { background: #e8f8f5; }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+        .modal-box {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 20px;
+            max-width: 420px;
+            width: 100%;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .modal-box h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .modal-note { font-size: 0.8rem; color: #7f8c8d; margin: 8px 0 15px 0; }
+        .months-list { list-style: none; margin: 0; padding: 0; }
+        .months-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 4px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1rem;
+        }
+        .months-list li span:first-child { color: #7f8c8d; font-weight: bold; }
+        .months-list li span:last-child { color: var(--text-color); font-weight: bold; }
+        .modal-back-btn {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: inherit;
+            color: white;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .live-badge {
+            font-size: 0.75rem;
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 5px;
+            vertical-align: middle;
+            animation: blink 1.5s infinite;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-top: 1px solid #ddd;
+        }
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        @keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.4;} 100% {opacity: 1;} }
     </style>
 </head>
 <body>
 
-<div class="container">
     <header>
-        <h1>🎼 ميزان البحور الرقمي الشامل</h1>
-        <p style="font-size:14px; color:#94a3b8;">محرك عروضي شامل ومطور لكافة تفريعات البحور الـ 16</p>
+        <h1>🗓️ المرصد العالمي للتقاويم</h1>
+        <p>عرض تفاعلي يوضح التواريخ وبداية حسابها تاريخياً</p>
+        
+        <div class="clock-container" id="clock-box">
+            <span class="live-badge" id="live-indicator">مباشر</span>
+            <span id="live-clock">00:00:00 م</span>
+        </div>
+
+        <div class="search-wrapper">
+            <div class="search-block">
+                <span>🔍 البحث والتحويل بالتقويم الميلادي (العالمي):</span>
+                <div class="converter-box">
+                    <select id="select-day"></select>
+                    <select id="select-month">
+                        <option value="0">يناير (1)</option>
+                        <option value="1">فبراير (2)</option>
+                        <option value="2">مارس (3)</option>
+                        <option value="3">أبريل (4)</option>
+                        <option value="4">مايو (5)</option>
+                        <option value="5">يونيو (6)</option>
+                        <option value="6">يوليو (7)</option>
+                        <option value="7">أغسطس (8)</option>
+                        <option value="8">سبتمبر (9)</option>
+                        <option value="9">أكتوبر (10)</option>
+                        <option value="10">نوفمبر (11)</option>
+                        <option value="11">ديسمبر (12)</option>
+                    </select>
+                    <select id="select-year"></select>
+                </div>
+            </div>
+
+            <div class="search-block" style="border-top: 1px dashed #ccc; padding-top: 10px;">
+                <span>🌙 البحث والتحويل بالتقويم الهجري الإسلامي:</span>
+                <div class="converter-box">
+                    <select id="hijri-day"></select>
+                    <select id="hijri-month">
+                        <option value="1">محرّم (1)</option>
+                        <option value="2">صَفَر (2)</option>
+                        <option value="3">ربيع الأول (3)</option>
+                        <option value="4">ربيع الآخر (4)</option>
+                        <option value="5">جمادى الأولى (5)</option>
+                        <option value="6">جمادى الآخرة (6)</option>
+                        <option value="7">رجب (7)</option>
+                        <option value="8">شعبان (8)</option>
+                        <option value="9">رمضان (9)</option>
+                        <option value="10">شوال (10)</option>
+                        <option value="11">ذو القعدة (11)</option>
+                        <option value="12">ذو الحجة (12)</option>
+                    </select>
+                    <select id="hijri-year"></select>
+                </div>
+            </div>
+            <button class="reset-btn" id="reset-button" onclick="resetToToday()">العودة للوقت الحالي الحي 🔄</button>
+        </div>
     </header>
 
-    <div class="input-section">
-        <label style="font-size:14px; display:block; margin-bottom:8px;">أدخل بيتاً واحداً أو عدة أبيات (كل بيت في سطر مستقل)، مع التشكيل الكامل، وافصل بين شطري كل بيت بنجمة *:</label>
-        <textarea id="poemInput" placeholder="مثال:&#10;وَلَسْتَ بِمُسْتَبْقٍ أَخًا لَا تَلُمُّهُ * عَلَى شَعَثٍ أَيُّ الرِّجَالِ الْمُهَذَّبُ&#10;بيت ثانٍ * عجزه هنا"></textarea>
-        <button onclick="processFullPoem()">تحليل القصيدة والحكم العروضي تلقائياً ✨</button>
+    <div class="grid-container" id="calendars-grid"></div>
+
+    <div class="modal-overlay" id="months-modal">
+        <div class="modal-box">
+            <h2 id="months-modal-title"></h2>
+            <p class="modal-note" id="months-modal-note"></p>
+            <ol class="months-list" id="months-modal-list"></ol>
+            <button class="modal-back-btn" onclick="closeMonthsModal()">⬅ عودة</button>
+        </div>
     </div>
 
-    <div id="resultsArea"></div>
+    <footer>
+        <p>جميع الحقوق محفوظة © <span id="author-name">باسم أبوأنس</span> 2026</p>
+        <p><a href="mailto:bamtag3@://gmail.com العالمي للتقاويم">📧 اتصل بنا للاقتراحات</a></p>
+    </footer>
+    <script>
+        let isLiveMode = true;
+        let selectedDate = new Date();
 
-    <footer class="site-footer">جميع الحقوق محفوظة : باسم أبو أنس 2026</footer>
-</div>
+        const daySelect = document.getElementById('select-day');
+        const monthSelect = document.getElementById('select-month');
+        const yearSelect = document.getElementById('select-year');
+        
+        const hijriDaySelect = document.getElementById('hijri-day');
+        const hijriMonthSelect = document.getElementById('hijri-month');
+        const hijriYearSelect = document.getElementById('hijri-year');
 
-<!-- قاعدة البيانات والمحرك مضمّنان في هذا الملف -->
-<script>
-// bahrData.js — بيانات البحور الـ16 (الرمز: / = متحرك ، 0 = ساكن)
-// FEET: كل تفعيلة وفروعها  [النمط، الاسم]
-const FEET = {
-  fal:['//0/0','فَعُولُنْ'], falQ:['//0/','فَعُولُ (مقبوضة)'], falH:['//0','فَعُو (محذوفة)'], falB:['/0','فَعْ (مبتورة)'],
-  maf:['//0/0/0','مَفَاعِيلُنْ'], mafQ:['//0//0','مَفَاعِلُنْ (مقبوضة)'], mafK:['//0/0/','مَفَاعِيلُ (مكفوفة)'],
-  fat:['/0//0/0','فَاعِلَاتُنْ'], fatKh:['///0/0','فَعِلَاتُنْ (مخبونة)'], fatH:['/0//0','فَاعِلَا (محذوفة)'], fatKhH:['///0','فَعِلَا (مخبونة محذوفة)'],
-  fan:['/0//0','فَاعِلُنْ'], fanKh:['///0','فَعِلُنْ (مخبونة)'], fanQ:['/0/0','فَاعِلْ (مقطوعة)'],
-  mus:['/0/0//0','مُسْتَفْعِلُنْ'], musKh:['//0//0','مُتَفْعِلُنْ (مخبونة)'], musT:['/0///0','مُسْتَعِلُنْ (مطوية)'], musKl:['////0','مُتَعِلُنْ (مخبولة)'], musQ:['/0/0/0','مُسْتَفْعِلْ (مقطوعة)'],
-  mut:['///0//0','مُتَفَاعِلُنْ'], mutM:['/0/0//0','مُتْفَاعِلُنْ (مضمرة)'], mutQ:['///0/0','مُتَفَاعِلْ (مقطوعة)'],
-  mfl:['//0///0','مَفَاعَلَتُنْ'], mflE:['//0/0/0','مُفَاعَلْتُنْ (معصوبة)'],
-  mfu:['/0/0/0/','مَفْعُولَاتُ'], mfuT:['/0//0/','مَفْعُلَاتُ (مطوية)']
-};
+        for (let d = 1; d <= 31; d++) {
+            daySelect.options[daySelect.options.length] = new Option(d, d);
+            if (d <= 30) hijriDaySelect.options[hijriDaySelect.options.length] = new Option(d, d);
+        }
+        for (let y = 1; y <= 2100; y++) {
+            yearSelect.options[yearSelect.options.length] = new Option(y, y);
+        }
+        for (let hy = 1; hy <= 1600; hy++) {
+            hijriYearSelect.options[hijriYearSelect.options.length] = new Option(hy, hy);
+        }
 
-// BAHRS: تفعيلات الشطر الواحد؛ كل موضع = التفعيلة الأصلية أولاً ثم ما يجوز فيها من زحافات وعلل
-// majzu: يجوز مجيئه مجزوءاً (بحذف تفعيلة من كل شطر)
-const BAHRS = [
-  { name:'الطويل',  feet:[['fal','falQ'],['maf','mafQ'],['fal','falQ'],['mafQ','maf','fal']] },
-  { name:'المديد',  majzu:true, feet:[['fat','fatKh'],['fan','fanKh'],['fat','fatKh','fatH','fatKhH']] },
-  { name:'البسيط',  feet:[['mus','musKh'],['fan','fanKh'],['mus','musKh'],['fan','fanKh','fanQ']] },
-  { name:'الوافر',  majzu:true, feet:[['mfl','mflE'],['mfl','mflE'],['fal','mfl']] },
-  { name:'الكامل',  majzu:true, feet:[['mut','mutM'],['mut','mutM'],['mut','mutM','mutQ']] },
-  { name:'الهزج',   feet:[['maf','mafK'],['maf','fal']] },
-  { name:'الرجز',   majzu:true, feet:[['mus','musKh','musT','musKl'],['mus','musKh','musT','musKl'],['mus','musKh','musT','musKl','musQ']] },
-  { name:'الرمل',   majzu:true, feet:[['fat','fatKh'],['fat','fatKh'],['fat','fatKh','fatH','fatKhH']] },
-  { name:'السريع',  feet:[['mus','musKh','musT','musKl'],['mus','musKh','musT','musKl'],['fan','fanKh','fanQ']] },
-  { name:'المنسرح', feet:[['mus','musKh','musT'],['mfu','mfuT'],['mus','musKh','musT','musQ']] },
-  { name:'الخفيف',  majzu:true, feet:[['fat','fatKh'],['mus','musKh'],['fat','fatKh','fatH','fatKhH']] },
-  { name:'المضارع', feet:[['mafK','maf'],['fat','fatKh']] },
-  { name:'المقتضب', feet:[['mfu','mfuT'],['mus','musKh','musT']] },
-  { name:'المجتث',  feet:[['musKh','mus'],['fatKh','fat']] },
-  { name:'المتقارب',feet:[['fal','falQ'],['fal','falQ'],['fal','falQ'],['fal','falQ','falH','falB']] },
-  { name:'المتدارك',feet:[['fan','fanKh','fanQ'],['fan','fanKh','fanQ'],['fan','fanKh','fanQ'],['fan','fanKh','fanQ']] }
-];
+        function updateClock() {
+            if (isLiveMode) {
+                const now = new Date();
+                document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG');
+                selectedDate = now;
+                
+                daySelect.value = now.getDate();
+                monthSelect.value = now.getMonth();
+                yearSelect.value = now.getFullYear();
+                
+                syncToHijriInputs(now);
+                renderCalendars(now);
+            }
+        }
+        setInterval(updateClock, 1000);
 
-// prosodyEngine.js — محرك التقطيع الصوتي والعروضي (/ = متحرك ، 0 = ساكن)
-// يعتمد على: FEET و BAHRS من bahrData.js
-const MARKS = {'\u064E':'a','\u064F':'u','\u0650':'i','\u0652':'o','\u0651':'s','\u064B':'A','\u064C':'U','\u064D':'I','\u0670':'d'};
-// كلمات تُلفظ بألف لا تُكتب: الرقم = موضع الحرف الذي تلحقه الألف
-const SPECIAL = {'هذا':0,'هذه':0,'هذي':0,'هذان':0,'ذلك':0,'ذلكم':0,'لكن':0,'الله':2,'لله':1,'الرحمن':4};
-const PREFIX = 'وفبكل';
+        function syncToHijriInputs(gDate) {
+            try {
+                // الكود مبرمج ليعمل فلكياً بأثر رجعي سليم للتمرير للخلف لـ عام 1 هـ
+                const formatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {day:'numeric', month:'numeric', year:'numeric'});
+                const parts = formatter.formatToParts(gDate);
+                hijriDaySelect.value = parseInt(parts.find(p => p.type === 'day').value);
+                hijriMonthSelect.value = parseInt(parts.find(p => p.type === 'month').value);
+                hijriYearSelect.value = parseInt(parts.find(p => p.type === 'year').value);
+            } catch(e){}
+        }
 
-// قاموس الكلمات المبنية (ثابتة التشكيل مهما تغير موقعها في الجملة: حروف الجر والعطف والاستفهام والشرط،
-// أسماء الإشارة، الأسماء الموصولة، الضمائر المنفصلة). إن كتبها المستخدم بلا أي تشكيل إطلاقاً تُشكَّل تلقائياً،
-// فلا تُحسب "حروفاً بلا تشكيل" ولا يُخطئ المحرك في تقطيعها. لا يشمل القاموس أسماء معربة (ككل، بعض، غير)
-// لأن حركة آخرها تتغير بحسب موقعها الإعرابي، وتخمينها قد يكون خاطئاً.
-const COMMON_RAW = [
-  "مِنْ","إِلَى","عَنْ","عَلَى","فِي","مَعَ","حَتَّى","مُنْذُ","مُذْ",
-  "وَ","فَ","ثُمَّ","أَوْ","أَمْ","بَلْ","لَكِنْ","لَا","هَلْ","قَدْ","لَقَدْ",
-  "لَنْ","لَمْ","لَمَّا","لَوْ","لَوْلَا","إِنْ","أَنْ","إِذَا","إِذْ","كَيْ","لِكَيْ",
-  "يَا","أَلَا","أَمَّا","إِمَّا","كَلَّا","نَعَمْ","بَلَى","أَجَلْ","كَأَنَّ","لَعَلَّ","لَيْتَ",
-  "هَذَا","هَذِهِ","هَذَانِ","هَاتَانِ","هَؤُلَاءِ","ذَلِكَ","تِلْكَ","أُولَئِكَ","هُنَا","هُنَاكَ",
-  "الَّذِي","الَّتِي","الَّذِينَ","اللَّذَانِ","اللَّتَانِ","اللَّوَاتِي","اللَّاتِي",
-  "أَنَا","أَنْتَ","أَنْتُمَا","أَنْتُمْ","أَنْتُنَّ","هُوَ","هِيَ","هُمَا","هُمْ","هُنَّ","نَحْنُ"
-];
-const COMMON_WORDS = {};
-COMMON_RAW.forEach(w => { COMMON_WORDS[w.replace(/[ً-ْٰ]/g, '')] = w; });
+        function handleGregorianChange() {
+            isLiveMode = false;
+            stopLiveUI();
+            const d = parseInt(daySelect.value);
+            const m = parseInt(monthSelect.value);
+            const y = parseInt(yearSelect.value);
+            selectedDate = new Date(y, m, d);
+            syncToHijriInputs(selectedDate);
+            renderCalendars(selectedDate);
+        }
 
-function parseWord(w) {
-  const L = [];
-  w = w.replace(/\u0671/g, 'ا').replace(/ى/g, 'ا');
-  for (const ch of w) {
-    if (ch >= '\u0621' && ch <= '\u064A') {
-      if (ch === 'آ') L.push({c:'أ', m:{a:1}}, {c:'ا', m:{}});
-      else L.push({c:ch, m:{}});
-    } else if (MARKS[ch] && L.length) L[L.length - 1].m[MARKS[ch]] = 1;
-  }
-  L.forEach(x => {
-    const m = x.m;
-    x.v = (m.a || m.d || m.A) ? 'a' : (m.u || m.U) ? 'u' : (m.i || m.I) ? 'i' : null;
-    x.tan = !!(m.A || m.U || m.I); x.sh = !!m.s; x.so = !!m.o; x.dg = !!m.d;
-  });
-  return L;
-}
+        function handleHijriChange() {
+            isLiveMode = false;
+            stopLiveUI();
+            const hd = parseInt(hijriDaySelect.value);
+            const hm = parseInt(hijriMonthSelect.value);
+            const hy = parseInt(hijriYearSelect.value);
 
-// إسقاط همزة الوصل وسط الكلام مع التقاء الساكنين
-function dropWasl(out) {
-  const p = out[out.length - 1];
-  if (!p) return;
-  if (p.mad) out.pop();          // حرف المد يُحذف
-  else if (p.t === '0') p.t = '/'; // الساكن يُكسر
-}
+            // تقدير أولي تقريبي فقط لبدء البحث (السنة الهجرية القمرية ≈ 354.367 يوماً)
+            let daysFactor = (hy - 1) * 354.367 + (hm - 1) * 29.53 + hd;
+            let gBaseTime = new Date(622, 6, 16).getTime(); // تاريخ بداية التقويم الهجري (16 يوليو 622 م)
+            let gEstimate = new Date(gBaseTime + (daysFactor - 1) * 24 * 60 * 60 * 1000);
 
-function scanPhones(text, ajuz) {
-  const words = text.replace(/[^\u0621-\u0652\u0670\u0671\s]/g, ' ').replace(/\u0640/g, '').split(/\s+/).filter(Boolean);
-  const out = []; let missing = 0;
-  const push = (t, o) => out.push(Object.assign({t}, o));
+            const readHijri = (d) => {
+                const parts = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(d);
+                return {
+                    day: parseInt(parts.find(p => p.type === 'day').value),
+                    month: parseInt(parts.find(p => p.type === 'month').value),
+                    year: parseInt(parts.find(p => p.type === 'year').value)
+                };
+            };
 
-  words.forEach((w, wi) => {
-    // تشكيل تلقائي للكلمات المبنية الشائعة إن كُتبت بلا أي تشكيل إطلاقاً (لا يُبدَّل أي تشكيل وضعه المستخدم بنفسه)
-    if (!/[ً-ْٰ]/.test(w)) {
-      const lookupKey = w.replace(/ٱ/g, 'ا');
-      if (COMMON_WORDS[lookupKey]) w = COMMON_WORDS[lookupKey];
-      else if (COMMON_WORDS[w]) w = COMMON_WORDS[w];
-    }
-    const L = parseWord(w);
-    if (!L.length) return;
-    const sk = L.map(x => x.c).join('');
-    for (const key in SPECIAL) for (const off of [0, 1]) {
-      if (sk.slice(off) === key && (off === 0 || PREFIX.includes(L[0].c)) && L[off + SPECIAL[key]]) L[off + SPECIAL[key]].ma = true;
-    }
-    let i0 = 0;
-    if (L[0].c === 'ا' && !L[0].v && !L[0].sh && !L[0].so && !L[0].tan) { // همزة وصل
-      if (wi > 0) dropWasl(out); else if (!ajuz) push('/'); // أول العجز متصل بالصدر فتسقط همزته
-      i0 = 1;
-    }
-    for (let i = i0; i < L.length; i++) {
-      const x = L[i], p = L[i - 1] || null, n = L[i + 1] || null;
-      if (x.c === 'ا') {
-        if (x.tan) push('0', {tan:1});
-        else if (i === 1 && PREFIX.includes(L[0].c) && n && ((n.c === 'ل' && !n.v && !n.tan) || (n.so && L.length >= 4))) { /* همزة وصل بعد واو/فاء/باء... */ }
-        else if (p && p.v === 'a' && !p.tan) push('0', {mad:1});
-        continue;
-      }
-      if (x.c === 'ل' && !x.v && !x.sh && !x.so && !x.tan && n && n.sh) continue; // لام شمسية
-      if (x.c === 'ل' && !x.v && !x.sh && !x.tan && ((i === 1 && i0 === 1) || (i === 2 && PREFIX.includes(L[0].c) && L[1].c === 'ا' && !L[1].v))) { push('0'); continue; } // لام التعريف القمرية ولو بلا سكون
-      if (((x.c === 'و' && p && p.v === 'u') || (x.c === 'ي' && p && p.v === 'i')) && !x.v && !x.sh && !x.tan) { push('0', {mad:1}); continue; }
-      if (x.sh) { push('0'); push('/'); if (!x.v) missing++; }
-      else if (x.v) push('/');
-      else if (x.so) push('0');
-      else { missing++; push((x.c === 'و' || x.c === 'ي') && i > 0 ? '0' : '/'); }
-      if (x.dg) push('0', {mad:1});
-      if (x.tan) push('0', {tan:1});
-      if (x.ma) push('0', {mad:1});
-    }
-    // إشباع هاء الضمير بين متحركين
-    const last = L[L.length - 1], nx = words[wi + 1] ? parseWord(words[wi + 1])[0] : null;
-    if (last.c === 'ه' && (last.v === 'u' || last.v === 'i') && !last.tan && !last.sh && !/لله$/.test(sk) &&
-        out.length > 1 && out[out.length - 2].t === '/' && nx && !(nx.c === 'ا' && !nx.v)) push('0', {mad:1});
-  });
-  return {phones: out, missing};
-}
+            let foundDate = gEstimate;
+            let matchFound = false;
 
-// آخر الشطر: إما ساكن (وقف) أو مُشبَع بحرف مد
-function endings(ph) {
-  const s = a => a.map(p => p.t).join('');
-  const last = ph[ph.length - 1];
-  if (!last) return [];
-  const fix = a => [...new Set(a.map(x => x.replace(/00$/, '0')))]; // ساكنان في آخر الشطر يُعدّان ساكناً واحداً
-  if (last.t === '0' && !last.tan) return fix([s(ph)]);
-  const base = last.tan ? ph.slice(0, -1) : ph;
-  return fix([s(base.slice(0, -1)) + '0', s(base) + '0']);
-}
+            try {
+                // تصحيح تكراري: يقيس فرق الأيام التقريبي بين التقدير والهدف ويقرّب التقدير خطوة خطوة،
+                // فيعمل بدقة مهما بَعُدت السنة الهجرية المطلوبة عن اليوم (بخلاف نطاق البحث الثابت السابق)
+                for (let round = 0; round < 6; round++) {
+                    const cur = readHijri(gEstimate);
+                    const monthsDiff = (hy - cur.year) * 12 + (hm - cur.month);
+                    const daysDiff = monthsDiff * 29.53 + (hd - cur.day);
+                    if (Math.abs(daysDiff) < 1) break;
+                    gEstimate = new Date(gEstimate.getTime() + daysDiff * 24 * 60 * 60 * 1000);
+                }
 
-function matchBahr(sym) {
-  const res = [];
-  BAHRS.forEach(b => {
-    const forms = [{n:b.name, f:b.feet}];
-    if (b.majzu) {
-      const f = b.feet.slice(0, -1);
-      f[f.length - 1] = [...new Set([...f[f.length - 1], ...b.feet[b.feet.length - 1]])];
-      forms.push({n:'مجزوء ' + b.name, f});
-    }
-    forms.forEach(({n, f}) => {
-      const m = new RegExp('^' + f.map(k => '(' + k.map(x => FEET[x][0]).join('|') + ')').join('') + '$').exec(sym);
-      if (!m) return;
-      let score = 0;
-      const feet = f.map((keys, i) => {
-        const k = keys.find(x => FEET[x][0] === m[i + 1]);
-        score += keys.indexOf(k);
-        return {sym:m[i + 1], label:FEET[k][1]};
-      });
-      res.push({name:n, base:b.name, sym, feet, score});
-    });
-  });
-  return res;
-}
+                // مسح دقيق لمجال ±10 أيام حول التقدير المصحَّح لضبط المطابقة بدقة 100%
+                for (let i = -10; i <= 10; i++) {
+                    let testDate = new Date(gEstimate.getTime() + i * 24 * 60 * 60 * 1000);
+                    const p = readHijri(testDate);
+                    if (p.day === hd && p.month === hm && p.year === hy) {
+                        foundDate = testDate;
+                        matchFound = true;
+                        break;
+                    }
+                }
+            } catch(e){}
 
-function analyzeHemistich(text, ajuz) {
-  const {phones, missing} = scanPhones(text, ajuz);
-  if (ajuz && phones[0] && phones[0].t === '0') phones.shift(); // ساكن أول العجز يلتحق بآخر الصدر
-  const cands = endings(phones);
-  const matches = [];
-  cands.forEach(sym => matches.push(...matchBahr(sym)));
-  matches.sort((a, b) => a.score - b.score);
-  return {sym: matches.length ? matches[0].sym : (cands[0] || ''), cands, matches, missing};
-}
+            // خيار احتياطي في حال جدار التصفح الفلكي القديم للهاتف
+            if (!matchFound) {
+                foundDate = gEstimate;
+                alert("تعذّر إيجاد مطابقة دقيقة لهذا التاريخ الهجري، والنتيجة المعروضة تقديرية فقط.");
+            }
 
-// الحكم على البيت: بحر مشترك بين الشطرين = موزون ، وإلا فيه كسر
-function judgeVerse(a, b) {
-  const pairs = [];
-  a.matches.forEach(x => {
-    const y = b.matches.find(z => z.name === x.name);
-    if (y && !pairs.some(p => p.name === x.name)) pairs.push({name:x.name, sadr:x, ajuz:y, score:x.score + y.score});
-  });
-  return pairs.sort((p, q) => p.score - q.score);
-}
+            selectedDate = foundDate;
+            daySelect.value = selectedDate.getDate();
+            monthSelect.value = selectedDate.getMonth();
+            yearSelect.value = selectedDate.getFullYear();
+            renderCalendars(selectedDate);
+        }
+        function stopLiveUI() {
+            document.getElementById('live-indicator').style.display = 'none';
+            document.getElementById('live-clock').innerText = "تاريخ مخصص";
+            document.getElementById('reset-button').style.display = 'inline-block';
+        }
 
-function textToProsodySymbols(text) { return analyzeHemistich(text).sym; }
+        function resetToToday() {
+            isLiveMode = true;
+            document.getElementById('live-indicator').style.display = 'inline-block';
+            document.getElementById('reset-button').style.display = 'none';
+            updateClock();
+        }
 
-</script>
+        function getChineseEstimate(date) {
+            // يُحسب فعلياً عبر تقويم Intl الصيني بدل التقدير الحسابي التقريبي القديم
+            try {
+                const parts = new Intl.DateTimeFormat('en-US-u-ca-chinese', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(date);
+                const cDay = parts.find(p => p.type === 'day').value;
+                const cMonth = parts.find(p => p.type === 'month').value;
+                // Intl لا يعطي "سنة منذ الإمبراطور الأصفر" جاهزة، بل "relatedYear" (السنة الميلادية المقابلة).
+                // نضيف إليها 2697، وهو الفارق المعتمد تاريخياً: حكومة الصين 1912 اعتمدت رسمياً تلك السنة
+                // بوصفها العام 4609 في تقويم الإمبراطور الأصفر (4609 - 1912 = 2697).
+                const yearPart = parts.find(p => p.type === 'relatedYear') || parts.find(p => p.type === 'year');
+                const cYear = yearPart ? parseInt(yearPart.value) + 2697 : '';
+                return `الشهر ${cMonth}، اليوم ${cDay}، سنة ${cYear} من بدء حكم الإمبراطور الأصفر`;
+            } catch(e) {
+                return "غير مدعوم";
+            }
+        }
 
+        function getCalendarsData(targetDate) {
+            const gregMonths = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            const gregionDate = `${targetDate.getDate()} ${gregMonths[targetDate.getMonth()]} ${targetDate.getFullYear()} من ميلاد السيد المسيح`;
 
-<script>
-function esc(s) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-const uniq = an => [...new Set(an.matches.map(m => m.name))].join('، ');
+            let islamicRaw = targetDate.toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric', calendar: 'islamic-umalqura' });
+            let islamicDate = islamicRaw.replace('هـ', '').trim() + " من الهجرة النبوية";
 
-function renderPart(title, text, an, m) {
-    const head = `<div class="part-title">${title}: ${esc(text)}</div>
-        <div class="row-item"><span class="label-text">التقطيع الصوتي:</span>
-        <span class="symbols" style="color:${m ? 'var(--success)' : 'var(--danger)'}">${an.sym}</span></div>`;
-    if (!m) return `<div class="part-result">${head}<div class="badge badge-danger">⚠ لا يطابق أي بحر من البحور الستة عشر</div></div>`;
-    const feet = m.feet.map(f => `<div class="tafila-box">
-        <div class="row-item"><span class="label-text">التقطيع العروضي:</span><span class="symbols">${f.sym}</span></div>
-        <div class="row-item"><span class="label-text">التفعيلة:</span><span class="tafila-name">${f.label}</span></div></div>`).join('');
-    return `<div class="part-result">${head}<div class="tafila-blocks">${feet}</div></div>`;
-}
+            const persianMonths = ["فروردين", "أرديبهشت", "خرداد", "تير", "مرداد", "شهريور", "مهر", "أبان", "آذر", "دي", "بهمن", "إسفند"];
+            let persianDate = "غير مدعوم";
+            try {
+                const pParts = new Intl.DateTimeFormat('en-US-u-ca-persian', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(targetDate);
+                const pDay = pParts.find(p => p.type === 'day').value;
+                const pMonth = persianMonths[parseInt(pParts.find(p => p.type === 'month').value) - 1];
+                const pYear = pParts.find(p => p.type === 'year').value;
+                persianDate = `${pDay} ${pMonth} ${pYear} من الهجرة (حساب شمسي)`;
+            } catch(e){}
 
-function analyzeOneVerse(line, idx, multi) {
-    const parts = line.split("*").map(s => s.trim());
-    const label = multi ? `البيت ${idx + 1}` : "البيت";
-    if (parts.length < 2 || !parts[0] || !parts[1]) {
-        return { weighed: false, html: `<div class="part-result"><div class="badge badge-danger">⚠ ${label}: غير مفصول بنجمة * بين الشطرين</div><div style="font-size:14px">${esc(line)}</div></div>` };
-    }
+            const indianMonths = ["تشايترا", "فايشاكا", "جيثا", "أشادا", "شرافانا", "بهادرا", "أشوين", "كارتيكا", "أغراهايانا", "باوشا", "ماغها", "فالغونا"];
+            let indianDate = "غير مدعوم";
+            try {
+                const iParts = new Intl.DateTimeFormat('en-US-u-ca-indian', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(targetDate);
+                const iDay = iParts.find(p => p.type === 'day').value;
+                const iMonth = indianMonths[parseInt(iParts.find(p => p.type === 'month').value) - 1];
+                const iYear = iParts.find(p => p.type === 'year').value;
+                indianDate = `${iDay} ${iMonth} ${iYear} من عهد حقبة سكا الفلكية`;
+            } catch(e){}
 
-    const a = analyzeHemistich(parts[0], false), b = analyzeHemistich(parts[1], true);
-    const pairs = judgeVerse(a, b), best = pairs[0];
-    let verdict;
-    if (best) {
-        verdict = `<div class="part-result"><div class="badge badge-success">✅ ${label}: موزون — من بحر ${best.name}</div>` +
-            (pairs.length > 1 ? `<div style="font-size:13px;color:#94a3b8">يحتمل أيضاً: ${pairs.slice(1).map(p => p.name).join('، ')}</div>` : '') + `</div>`;
-    } else {
-        let why = `الصدر على (${uniq(a)}) والعجز على (${uniq(b)}) ولا يجتمعان في بحر واحد`;
-        if (!a.matches.length && !b.matches.length) why = 'الكسر في الشطرين، أو أن التشكيل غير كامل';
-        else if (!a.matches.length) why = 'الكسر في الشطر الأول (الصدر)';
-        else if (!b.matches.length) why = 'الكسر في الشطر الثاني (العجز)';
-        verdict = `<div class="part-result"><div class="badge badge-danger">⚠ ${label}: فيه كسر</div><div style="font-size:14px">${why}</div></div>`;
-    }
-    const miss = a.missing + b.missing;
-    if (miss) verdict += `<div class="part-result" style="color:#f59e0b;font-size:14px">⚠ في هذا البيت ${miss} حرفاً بلا تشكيل (ولا تشملها الكلمات الشائعة المُشكَّلة تلقائياً)، وقد تكون النتيجة غير دقيقة.</div>`;
+            let chineseDate = getChineseEstimate(targetDate);
 
-    const html = verdict +
-        renderPart(`${label} — الشطر الأول (الصدر)`, parts[0], a, best ? best.sadr : a.matches[0]) +
-        renderPart(`${label} — الشطر الثاني (العجز)`, parts[1], b, best ? best.ajuz : b.matches[0]);
-    return { weighed: !!best, html };
-}
+            // استُبدلت الطريقة السابقة (تنسيق نصي كامل بلغة "ar" ثم شطب الحروف اللاتينية بتعبير نمطي) لأنها كانت
+            // تحذف اسم الشهر نفسه على بعض المتصفحات حين يظهر بحروف لاتينية، فلا يبقى إلا الرقمان. الآن يُقرأ
+            // اسم الشهر إنجليزياً عبر Intl ثم يُترجم من جدول ثابت، بنفس أسلوب التقاويم الفارسي والهندي أعلاه.
+            const hebrewMonths = {
+                'Tishri': 'تشري', 'Heshvan': 'حشوان', 'Cheshvan': 'حشوان', 'Kislev': 'كسليف',
+                'Tevet': 'طيبت', 'Shevat': 'شباط', 'Adar': 'أدار', 'Adar I': 'أدار الأول', 'Adar II': 'أدار الثاني',
+                'Nisan': 'نيسان', 'Iyar': 'أيار', 'Sivan': 'سيفان', 'Tamuz': 'تموز', 'Tammuz': 'تموز',
+                'Av': 'آب', 'Elul': 'أيلول'
+            };
+            let hebrewDate = "غير مدعوم";
+            try {
+                const hParts = new Intl.DateTimeFormat('en-US-u-ca-hebrew', {day:'numeric', month:'long', year:'numeric'}).formatToParts(targetDate);
+                const hDay = hParts.find(p => p.type === 'day').value;
+                const hMonthRaw = hParts.find(p => p.type === 'month').value;
+                const hMonth = hebrewMonths[hMonthRaw] || hMonthRaw;
+                const hYear = hParts.find(p => p.type === 'year').value;
+                hebrewDate = `${hDay} ${hMonth} ${hYear} من بدء خلق العالم (حسب المعتقد)`;
+            } catch(e){}
 
-function processFullPoem() {
-    const input = document.getElementById("poemInput").value;
-    if (!input.trim()) { alert("الرجاء إدخال نص أولاً!"); return; }
-    const lines = input.split("\n").map(l => l.trim()).filter(l => l !== "");
-    if (!lines.length) { alert("الرجاء إدخال بيت واحد على الأقل!"); return; }
+            const copticMonths = ["توت", "بابه", "هاتور", "كيهك", "طوبة", "أمشير", "برمهات", "برمودة", "بشنس", "بؤونة", "أبيب", "مسرى", "النسيء"];
+            let copticDate = "غير مدعوم";
+            try {
+                const copParts = new Intl.DateTimeFormat('en-US-u-ca-coptic', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(targetDate);
+                const copDay = copParts.find(p => p.type === 'day').value;
+                const copMonth = copticMonths[parseInt(copParts.find(p => p.type === 'month').value) - 1];
+                const copYear = copParts.find(p => p.type === 'year').value;
+                copticDate = `${copDay} ${copMonth} ${copYear} من عصر الشهداء (ديوكلتيانوس)`;
+            } catch(e){}
 
-    const multi = lines.length > 1;
-    let weighedCount = 0;
-    let bodyHtml = "";
-    lines.forEach((line, idx) => {
-        const r = analyzeOneVerse(line, idx, multi);
-        if (r.weighed) weighedCount++;
-        bodyHtml += r.html;
-    });
+            const ethiopianMonths = ["مسكيرم", "تكيمت", "هيدار", "تاهساس", "تير", "ياكاتيت", "مغابيت", "ميازا", "غنبوت", "سني", "حملي", "نهاسي", "باغومي"];
+            let ethiopicDate = "غير مدعوم";
+            try {
+                const ethParts = new Intl.DateTimeFormat('en-US-u-ca-ethiopic', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(targetDate);
+                const ethDay = ethParts.find(p => p.type === 'day').value;
+                const ethMonth = ethiopianMonths[parseInt(ethParts.find(p => p.type === 'month').value) - 1];
+                const ethYear = ethParts.find(p => p.type === 'year').value;
+                ethiopicDate = `${ethDay} ${ethMonth} ${ethYear} من تجسد المسيح (تأريخ كنسي)`;
+            } catch(e){}
 
-    let summaryHtml = "";
-    if (multi) {
-        summaryHtml = `<div class="part-result">
-            <div class="part-title" style="border-bottom:none;margin-bottom:0;">📊 ملخص القصيدة (${lines.length} أبيات)</div>
-            <div style="font-size:15px;margin-top:8px;">موزون: <span style="color:var(--success);font-weight:bold;">${weighedCount}</span>
-            &nbsp;—&nbsp; فيه كسر: <span style="color:var(--danger);font-weight:bold;">${lines.length - weighedCount}</span></div>
-        </div>`;
-    }
+            // نفس إصلاح التقويم العبري أعلاه: Intl عبر ar-EG قد يعيد اسم الشهر بحروف لاتينية على بعض المتصفحات
+            // فيُحذف بالتعبير النمطي. التقويم البوذي التايلاندي يشارك التقويم الميلادي أشهره تماماً (فارق السنة فقط)،
+            // فنقرأ رقم الشهر والسنة عددياً عبر Intl ونطابق اسم الشهر من نفس جدول gregMonths أعلاه.
+            let buddhistDate = "غير مدعوم";
+            try {
+                const bParts = new Intl.DateTimeFormat('en-US-u-ca-buddhist', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(targetDate);
+                const bDay = bParts.find(p => p.type === 'day').value;
+                const bMonth = gregMonths[parseInt(bParts.find(p => p.type === 'month').value) - 1];
+                const bYear = bParts.find(p => p.type === 'year').value;
+                buddhistDate = `${bDay} ${bMonth} ${bYear} من وفاة غوتاما بوذا`;
+            } catch(e){}
 
-    document.getElementById("resultsArea").innerHTML = summaryHtml + bodyHtml;
-}
-</script>
+            // أسماء أشهر كل تقويم، لعرضها في نافذة "أشهر التقويم" أسفل كل بطاقة
+            const hijriMonthNames = ["محرّم", "صَفَر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"];
+            const hebrewMonthNames = ["تشري", "حشوان", "كسليف", "طيبت", "شباط", "أدار (أدار الأول/الثاني في الكبيسة)", "نيسان", "أيار", "سيفان", "تموز", "آب", "أيلول"];
+            const chineseMonthNames = ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر", "الحادي عشر", "الثاني عشر"];
 
+            return [
+                { name: "التقويم الميلادي (العالمي)", type: "شمسي", date: gregionDate, months: gregMonths, monthsNote: "" },
+                { name: "التقويم الهجري", type: "قمري", date: islamicDate, months: hijriMonthNames, monthsNote: "" },
+                { name: "التقويم الفارسي (الإيراني)", type: "شمسي", date: persianDate, months: persianMonths, monthsNote: "" },
+                { name: "التقويم الهندي الوطني", type: "قمري شمسي", date: indianDate, months: indianMonths, monthsNote: "" },
+                { name: "التقويم الصيني التقليدي", type: "قمري شمسي", date: chineseDate, months: chineseMonthNames, monthsNote: "قد تُضاف سنة كبيسة قمرية شهر إضافي (شهر نسيء) لا اسم ثابتاً له." },
+                { name: "التقويم العبري", type: "قمري شمسي", date: hebrewDate, months: hebrewMonthNames, monthsNote: "في السنوات الكبيسة ينقسم أدار إلى أدار الأول وأدار الثاني." },
+                { name: "التقويم القبطي المصري", type: "شمسي", date: copticDate, months: copticMonths, monthsNote: "الشهر الثالث عشر (النسيء) خمسة أيام، وستة في السنة الكبيسة." },
+                { name: "التقويم الإثيوبي", type: "شمسي", date: ethiopicDate, months: ethiopianMonths, monthsNote: "الشهر الثالث عشر (باغومي) خمسة أيام، وستة في السنة الكبيسة." },
+                { name: "التقويم البوذي التايلاندي", type: "شمسي قمرى", date: buddhistDate, months: gregMonths, monthsNote: "يشارك التقويم الميلادي أشهره؛ الفارق في عدّ السنة فقط." }
+            ];
+        }
+
+        let calendarsMonthsMap = {};
+
+        function renderCalendars(dateToShow) {
+            const grid = document.getElementById('calendars-grid');
+            const data = getCalendarsData(dateToShow);
+            grid.innerHTML = '';
+            calendarsMonthsMap = {};
+
+            data.forEach((cal, idx) => {
+                calendarsMonthsMap[idx] = cal;
+                const card = document.createElement('div');
+                card.className = 'calendar-card';
+                card.innerHTML = `
+                    <h3>${cal.name} <span class="type-badge">${cal.type}</span></h3>
+                    <div class="date-display">${cal.date}</div>
+                    <button class="months-btn" onclick="openMonthsModal(${idx})">📅 أشهر التقويم</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openMonthsModal(idx) {
+            const cal = calendarsMonthsMap[idx];
+            if (!cal) return;
+            document.getElementById('months-modal-title').innerText = cal.name;
+            document.getElementById('months-modal-note').innerText = cal.monthsNote || '';
+            document.getElementById('months-modal-note').style.display = cal.monthsNote ? 'block' : 'none';
+            const list = document.getElementById('months-modal-list');
+            list.innerHTML = '';
+            cal.months.forEach((mName, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>الشهر ${i + 1}</span><span>${mName}</span>`;
+                list.appendChild(li);
+            });
+            document.getElementById('months-modal').classList.add('open');
+        }
+
+        function closeMonthsModal() {
+            document.getElementById('months-modal').classList.remove('open');
+        }
+
+        daySelect.addEventListener('change', handleGregorianChange);
+        monthSelect.addEventListener('change', handleGregorianChange);
+        yearSelect.addEventListener('change', handleGregorianChange);
+
+        hijriDaySelect.addEventListener('change', handleHijriChange);
+        hijriMonthSelect.addEventListener('change', handleHijriChange);
+        hijriYearSelect.addEventListener('change', handleHijriChange);
+
+        updateClock();
+    </script>
 </body>
 </html>
