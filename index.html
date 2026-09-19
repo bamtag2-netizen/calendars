@@ -370,9 +370,11 @@
                 const parts = new Intl.DateTimeFormat('en-US-u-ca-chinese', {day:'numeric', month:'numeric', year:'numeric'}).formatToParts(date);
                 const cDay = parts.find(p => p.type === 'day').value;
                 const cMonth = parts.find(p => p.type === 'month').value;
-                // التقويم الصيني في Intl لا يعيد حقل "year" بل "relatedYear" (السنة الميلادية المرتبطة بالدورة)
-                const yearPart = parts.find(p => p.type === 'year') || parts.find(p => p.type === 'relatedYear');
-                const cYear = yearPart ? yearPart.value : '';
+                // Intl لا يعطي "سنة منذ الإمبراطور الأصفر" جاهزة، بل "relatedYear" (السنة الميلادية المقابلة).
+                // نضيف إليها 2697، وهو الفارق المعتمد تاريخياً: حكومة الصين 1912 اعتمدت رسمياً تلك السنة
+                // بوصفها العام 4609 في تقويم الإمبراطور الأصفر (4609 - 1912 = 2697).
+                const yearPart = parts.find(p => p.type === 'relatedYear') || parts.find(p => p.type === 'year');
+                const cYear = yearPart ? parseInt(yearPart.value) + 2697 : '';
                 return `الشهر ${cMonth}، اليوم ${cDay}، سنة ${cYear} من بدء حكم الإمبراطور الأصفر`;
             } catch(e) {
                 return "غير مدعوم";
@@ -434,9 +436,6 @@
             let buddhistRaw = targetDate.toLocaleDateString('ar-EG-u-ca-buddhist', { year: 'numeric', month: 'long', day: 'numeric' });
             let buddhistDate = buddhistRaw.replace(/[A-Za-z]/g, '').replace('BE', '').trim() + " من وفاة غوتاما بوذا";
 
-            const jucheYear = targetDate.getFullYear() - 1911;
-            const jucheDate = `${targetDate.getDate()} ${gregMonths[targetDate.getMonth()]} ${jucheYear} من ميلاد القائد كيم إيل سونغ`;
-
             return [
                 { name: "التقويم الميلادي (العالمي)", type: "شمسي", date: gregionDate },
                 { name: "التقويم الهجري", type: "قمري", date: islamicDate },
@@ -446,8 +445,7 @@
                 { name: "التقويم العبري", type: "قمري شمسي", date: hebrewDate },
                 { name: "التقويم القبطي المصري", type: "شمسي", date: copticDate },
                 { name: "التقويم الإثيوبي", type: "شمسي", date: ethiopicDate },
-                { name: "التقويم البوذي التايلاندي", type: "شمسي قمرى", date: buddhistDate },
-                { name: "تقويم جوتشي (كوريا ن.)", type: "شمسي", date: jucheDate }
+                { name: "التقويم البوذي التايلاندي", type: "شمسي قمرى", date: buddhistDate }
             ];
         }
 
